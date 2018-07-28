@@ -43,6 +43,8 @@
 #include <functional>
 
 #include "moviereviews.h"
+#include "GTestNoDeath.h"
+
 #include "gtest/gtest.h"
 namespace {
 
@@ -131,36 +133,37 @@ TEST_F(MovieReviewsTest, ThousandReviews) {
     uint8_t reviews[1000][6];
     readMovieReviews("../../reviews.txt", reviews);
 
-        MovieReviews reviews1(reviews, 1000);
-        uint8_t userReview1[] = {0, 1, 0, 2, 0, 3};
-        reviews1.predictEmptyReviews(userReview1);
+    MovieReviews reviews1(reviews, 1000);
+    uint8_t userReview1[] = {0, 1, 0, 2, 0, 3};
+    reviews1.predictEmptyReviews(userReview1);
 
-        ASSERT_EQ(4, userReview1[0]);
-        ASSERT_EQ(1, userReview1[1]);
-        ASSERT_EQ(4, userReview1[2]);
-        ASSERT_EQ(2, userReview1[3]);
-        ASSERT_EQ(3, userReview1[4]);
-        ASSERT_EQ(3, userReview1[5]);
+    ASSERT_EQ(4, userReview1[0]);
+    ASSERT_EQ(1, userReview1[1]);
+    ASSERT_EQ(4, userReview1[2]);
+    ASSERT_EQ(2, userReview1[3]);
+    ASSERT_EQ(3, userReview1[4]);
+    ASSERT_EQ(3, userReview1[5]);
 
-        uint8_t userReview2[] = {5, 0, 4, 0, 3, 0};
-        reviews1.predictEmptyReviews(userReview2);
+    uint8_t userReview2[] = {5, 0, 4, 0, 3, 0};
+    reviews1.predictEmptyReviews(userReview2);
 
-        ASSERT_EQ(5, userReview2[0]);
-        ASSERT_EQ(3, userReview2[1]);
-        ASSERT_EQ(4, userReview2[2]);
-        ASSERT_EQ(3, userReview2[3]);
-        ASSERT_EQ(3, userReview2[4]);
-        ASSERT_EQ(3, userReview2[5]);
+    ASSERT_EQ(5, userReview2[0]);
+    ASSERT_EQ(3, userReview2[1]);
+    ASSERT_EQ(4, userReview2[2]);
+    ASSERT_EQ(3, userReview2[3]);
+    ASSERT_EQ(3, userReview2[4]);
+    ASSERT_EQ(3, userReview2[5]);
 
-        _testScore += 10;
-    }
+    _testScore += 10;
+}
 
-TEST_F(MovieReviewsTest, ErrorChecking) {
+TEST_F(MovieReviewsTest, ErrorCheckingSizeTooBig) {
     uint8_t reviews[1000][6];
     readMovieReviews("../../reviews.txt", reviews);
 
-    MovieReviews movies1(reviews, 10001);
+    ASSERT_NO_DEATH(MovieReviews movies1(reviews, 10001), "");
     uint8_t userReview1[] = {0, 1, 0, 2, 0, 3};
+    MovieReviews movies1(reviews, 10001);
     movies1.predictEmptyReviews(userReview1);
 
     ASSERT_EQ(4, userReview1[0]);
@@ -171,10 +174,15 @@ TEST_F(MovieReviewsTest, ErrorChecking) {
     ASSERT_EQ(3, userReview1[5]);
 
     _testScore += 2;
+}
 
+TEST_F(MovieReviewsTest, ErrorCheckingNullReviews) {
+    ASSERT_NO_DEATH(MovieReviews movies2(NULL, 1000), "");
     MovieReviews movies2(NULL, 1000);
     uint8_t userReview2[] = {0, 1, 0, 2, 0, 3};
-    movies2.predictEmptyReviews(userReview1);
+
+    movies2.predictEmptyReviews(userReview2);
+
     ASSERT_EQ(0, userReview2[0]);
     ASSERT_EQ(1, userReview2[1]);
     ASSERT_EQ(0, userReview2[2]);
@@ -182,7 +190,13 @@ TEST_F(MovieReviewsTest, ErrorChecking) {
     ASSERT_EQ(0, userReview2[4]);
     ASSERT_EQ(3, userReview2[5]);
 
-    _testScore += 3;
+    _testScore += 2;
+}
+
+TEST_F(MovieReviewsTest, ErrorCheckingNullUserReview) {
+    MovieReviews movies;
+    ASSERT_NO_DEATH(movies.predictEmptyReviews(NULL), ".*");
+    _testScore += 1;
 }
 
 }
