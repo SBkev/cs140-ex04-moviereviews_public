@@ -49,9 +49,9 @@
 
 namespace {
 
-//using edu::sbcc::cs140::predictEmptyReviews;
-//using edu::sbcc::cs140::NUMBER_MOVIES;
-//using edu::sbcc::cs140::MAX_REVIEWS;
+using edu::sbcc::cs140::predictEmptyReviews;
+using edu::sbcc::cs140::NUMBER_MOVIES;
+using edu::sbcc::cs140::MAX_REVIEWS;
 
 void readMovieReviews(const std::string &filename, uint8_t reviews[1000][6]) {
     std::ifstream in(filename);
