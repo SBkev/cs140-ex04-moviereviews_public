@@ -143,7 +143,7 @@ assignment minus code styling points which I will add later.
 ### Submitting the code for this project
 
 First, right click on the project name, then select `Git -> Commit Directory...`. 
-Make sure only the files you want to push are selected, `main.cc` and `fibonacci.h`.
+Make sure only the files you want to push are selected, `main.cc`, `moviereviews.h` and `moviereviews.cc`.
 Then uncheck `Perform code analysis` and `Check TODO`. It's OK to leave them checked,
 but committing will take longer. Leave `Run git hooks` checked. Put a message in `Commit Message`
 and then press the **Commit** button. If anything goes wrong check the _Version Control_ view
