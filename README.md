@@ -40,7 +40,7 @@ In CLion in the project explorer, right-click the `include` directory
 and chose `New => C++ Header File`. 
 
 Under **Name** fill in
-moviereviews. CLion will add the `.h` extension. Press **OK**. You should now see the file `windchillindex.h` in
+moviereviews. CLion will add the `.h` extension. Press **OK**. You should now see the file `moviereviews.h` in
 the project explorer in the `include` directory.
 
 Write your declaration of the `sort` in here in the `edu::sbcc::cs140` namespace.
