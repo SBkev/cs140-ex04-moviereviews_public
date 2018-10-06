@@ -5,13 +5,15 @@
 #ifndef EX04_MOVIEREVIEWS_MOVIEREVIEWS_H
 #define EX04_MOVIEREVIEWS_MOVIEREVIEWS_H
 
+#include <cstdint>
+
 namespace edu {
     namespace sbcc {
         namespace cs140 {
             static constexpr size_t NUMBER_MOVIES = 6;
             static constexpr size_t MAX_REVIEWS = 1000;
-            void predictEmptyReviews (int reviewsExisting [1000] [6], int reviewsUser [6] [1], int maxSize);
-            double cartesianDistance (const int a[], const int b[], int size);
+            void predictEmptyReviews (uint8_t reviews [MAX_REVIEWS] [NUMBER_MOVIES], uint8_t user_reviews [NUMBER_MOVIES], const int review_number);
+            double cartesianDistance (const int array1[], const int  array2[], int size);
         }
     }
 }
