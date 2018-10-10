@@ -76,9 +76,9 @@ using namespace ::testing_internal;
 
 class MovieReviewsTest : public ::testing::Test {
 protected:
-    static const uint MAX_TESTED_SCORE = 20;
-    static const uint MAX_OVERALL_SCORE = 25;
-    static uint _testScore;
+    static const uint8_t MAX_TESTED_SCORE = 20;
+    static const uint8_t MAX_OVERALL_SCORE = 25;
+    static uint8_t _testScore;
 
 protected:
     static void TearDownTestCase() {
@@ -101,7 +101,7 @@ protected:
     }
 };
 
-uint MovieReviewsTest::_testScore = 0;
+uint8_t MovieReviewsTest::_testScore = 0;
 
 uint8_t DEFAULT_REVIEWS[][NUMBER_MOVIES] = {
         {3, 1, 5, 2, 1, 5},

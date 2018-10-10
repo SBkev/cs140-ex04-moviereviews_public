@@ -9,5 +9,5 @@ int main(){
     using namespace edu::sbcc::cs140;
     int user[] = {5,2,12};
     int reviews[] = {5,1,5};
-    std::cout << cartesianDistance(user,reviews, 3); //test my cartDistance calculation
+    //std::cout << cartesianDistance(user,reviews, 3); //test my cartDistance calculation
 }

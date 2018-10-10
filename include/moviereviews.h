@@ -13,7 +13,6 @@ namespace edu {
             static constexpr size_t NUMBER_MOVIES = 6;
             static constexpr size_t MAX_REVIEWS = 1000;
             void predictEmptyReviews (const uint8_t reviews [MAX_REVIEWS] [NUMBER_MOVIES], uint8_t userReviews [NUMBER_MOVIES], const int review_number);
-            double cartesianDistance (const int array1[], const int  array2[], int size);
         }
     }
 }

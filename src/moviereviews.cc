@@ -10,7 +10,7 @@ namespace edu {
     namespace sbcc {
         namespace cs140 {
 
-            double cartesianDistance (const int array1[], const int  array2[], const size_t size)
+            double cartesianDistance (const uint8_t array1[], const uint8_t array2[], const size_t size)
             //precondition: this function is only valid for comparing two arrays with the same size
             //this function will calculate the distance between two arrays using the cartesian method
             {
@@ -128,3 +128,4 @@ namespace edu {
         }
     }
 }
+
