@@ -9,120 +9,70 @@
 namespace edu {
     namespace sbcc {
         namespace cs140 {
-
-            double cartesianDistance (const uint8_t array1[], const uint8_t array2[], const size_t size)
-            //precondition: this function is only valid for comparing two arrays with the same size
-            //this function will calculate the distance between two arrays using the cartesian method
+            void predictEmptyReviews (const uint8_t reviews [][NUMBER_MOVIES], uint8_t user_reviews [NUMBER_MOVIES], const int reviews_count)
+            //predict the empty reviews using the cartesian distance method
             {
-                double array_sum = 0;
-                for (int i=0; i < size; i++)
+                double distance = 0;
+                double distance_min = 0; //minimum distance calculated
+                double nearest_reviews[NUMBER_MOVIES]; //this accumulates values of nearest reviews. should be divided by nearest_count at end to yield predicted reviews
+                int nearest_count = 0; //number of reviews with the same distance
+                int reviews_row [NUMBER_MOVIES];
+
+                for (int i=0; i < reviews_count; i++) //rows of reviews
                 {
-                    array_sum += pow(array1[i] - array2[i],2);
+                    distance = 0;
+                    for (int j = 0; j < NUMBER_MOVIES; j++) //columns of reviews
+                    {
+                        reviews_row[j] = reviews[i][j];
+                        if (user_reviews[j] != 0) //only process non-zero reviews
+                        {
+                            distance += pow(reviews[i][j] - user_reviews[j], 2);
+                        }
+                    }
+                    distance = sqrt(distance); //final distance calculation
+                    //std::cout << "Calculated distance for review " << i << " is: " << distance << std::endl;
+
+                    if (i==0 || distance < distance_min)
+                    {
+                        distance_min = distance;
+                        //std::memcpy(nearest_reviews, reviews_row, NUMBER_MOVIES); //set nearest review to value of review row
+                        for (int k=0; k < NUMBER_MOVIES; k++)
+                        {
+                            nearest_reviews[k] = reviews_row[k];
+                        }
+                        nearest_count = 1;
+                    }
+                    else if (distance == distance_min)
+                    {
+                        for (int k = 0; k < NUMBER_MOVIES; k++) //add columns of current review row to nearest_reviews
+                        {
+                            nearest_reviews[k] = reviews_row[k] + nearest_reviews[k];
+                        }
+                        nearest_count += 1;
+                    }
                 }
-                return sqrt(array_sum); //return calculated distance
-            }
 
-            void addArrays(const int *array1, const int *array2, int *sum, const size_t size)
-            // precondition: all array inputs are unique!
-            // this function will add two arrays of the same size. result is passed into 'sum'
-            {
-                for (int i = 0; i < size; i++)
-                {
-                    sum[i] = array1[i] + array2[i];
-                }
-            }
-
-
-            void predictEmptyReviews (const uint8_t reviews [][NUMBER_MOVIES], uint8_t userReviews [NUMBER_MOVIES], const int reviews_count)
-            {
-                //TODO: consider implementing the zero indexing operations in standalone function
-
-                size_t nonzerocount = 0;
-                size_t zerocount = 0;
-
-                //count the number of zero & nonzero entries
+                std::cout << "Minimum distance is " << distance_min << std::endl;
+                std::cout << "Nearest count is " << nearest_count << std::endl;
+                std::cout << "Nearest reviews (averaged) are: ";
                 for (int i = 0; i < NUMBER_MOVIES; i++)
                 {
-                    if (userReviews[i] != 0)
-                    {
-                        nonzerocount+=1;
-                    }
-                    else
-                    {
-                        zerocount+=1;
-                    }
+                    nearest_reviews[i] = nearest_reviews[i] / nearest_count; //average values in nearest_reviews
+                    std::cout << nearest_reviews[i] << " ";
                 }
+                std::cout << std::endl;
 
-                int nonzeroindex[NUMBER_MOVIES];
-                int zeroindices[NUMBER_MOVIES];
-
-                //index the zero and nonzero entries
-                for (int i = 0, j=0, k=0; i < NUMBER_MOVIES; i++)
+                //replace values of user_reviews with predictions
+                std::cout << "Predicted review (inside predicted function) is: ";
+                for (int i = 0; i < NUMBER_MOVIES; i++)
                 {
-                    if (userReviews[i] != 0)
+                    if (user_reviews[i] == 0) //only process zero value reviews
                     {
-                        nonzeroindex[j] = i;
-                        j+=1;
+                        user_reviews[i] = uint8_t(nearest_reviews[i]);
                     }
-                    else
-                    {
-                        zeroindices[k] = i;
-                        k+=1;
-                    }
+                    std::cout << unsigned(user_reviews[i]) << " ";
                 }
-
-                std::cout << "The nonzero indices are: " << nonzeroindex << ". The zero indices are: " << zeroindices << std::endl;
-
-                // calculate the distance between nonzero entries of user and reviews
-                double distance = 0;
-                double minDistance = 0;
-                int accumCount = 0;
-
-                double accumReviews[NUMBER_MOVIES];
-                int reviewIndexed[NUMBER_MOVIES];
-                int userReviewIndexed[NUMBER_MOVIES];
-
-                for (int i=0; i < reviews_count; i++) //iterate over reviews. calculate distance for each
-                {
-                    for (int j=0; j < nonzerocount; j++) //extract the reviews columns for distance calculation
-                    {
-                        reviewIndexed[j] = reviews[i][nonzeroindex[j]]; //iterate over columns of 1 review. extract the values for comparison
-                        userReviewIndexed[j] = userReviews[nonzeroindex[j]]; //extract nonzero values from user reviews TODO: this could be performed once for efficiency's sake
-                    }
-
-                    distance = cartesianDistance(userReviewIndexed, reviewIndexed, nonzerocount);
-                    std::cout << "Calculated distance for review " << i << " is " << distance;
-
-                    if (i==0 || distance < minDistance) {
-                        minDistance = distance;
-                        std::memcpy(accumReviews, reviewIndexed, nonzerocount);
-                        accumCount = 1;
-                    }
-                    else if (distance == minDistance) {
-                        //int array_temp[nonzerocount]; //this is used to satisfy precondition of 'addArrays' function
-                        //addArrays(&reviewIndexed, &accumReviews, &array_temp, nonzerocount);
-                        //std::memcpy(accumReviews, array_temp, nonzerocount); //add reviewIndexed to accumReviews
-                        // TODO: not sure why I can't call the addArrays function....
-
-                        for (int k = 0; k < nonzerocount; k++)
-                        {
-                            accumReviews[k] = reviewIndexed[k] + accumReviews[k];
-                        }
-                        accumCount += 1;
-                    }
-                }
-
-                double predictedReviews[NUMBER_MOVIES];
-
-                //average values in accumReviews
-                for (int i=0; i < nonzerocount; i++) {
-                    predictedReviews[i] = accumReviews[i] / accumCount;
-                }
-
-                //replace zero entries of user reviews with values from predictedReviews
-                for (int i=0; i< zerocount; i++){
-                    userReviews[zeroindices[i]] = predictedReviews[i]; //TODO: is the type mismatch OK?
-                }
+                std::cout << std::endl << std::endl << "////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////" << std::endl;
             }
 
         }
