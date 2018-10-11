@@ -12,6 +12,9 @@ namespace edu {
             void predictEmptyReviews (const uint8_t reviews [][NUMBER_MOVIES], uint8_t user_reviews [NUMBER_MOVIES], const int reviews_count)
             //predict the empty reviews using the cartesian distance method
             {
+                if (reviews_count > MAX_REVIEWS)
+                    exit(1);
+
                 double distance = 0;
                 double distance_min = 0; //minimum distance calculated
                 double nearest_reviews[NUMBER_MOVIES]; //this accumulates values of nearest reviews. should be divided by nearest_count at end to yield predicted reviews
@@ -68,7 +71,7 @@ namespace edu {
                 {
                     if (user_reviews[i] == 0) //only process zero value reviews
                     {
-                        user_reviews[i] = uint8_t(nearest_reviews[i]);
+                        user_reviews[i] = uint8_t (std::ceil(nearest_reviews[i]));
                     }
                     std::cout << unsigned(user_reviews[i]) << " ";
                 }
