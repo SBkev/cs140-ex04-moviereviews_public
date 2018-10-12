@@ -9,11 +9,13 @@
 namespace edu {
     namespace sbcc {
         namespace cs140 {
-            void predictEmptyReviews (const uint8_t reviews [][NUMBER_MOVIES], uint8_t user_reviews [NUMBER_MOVIES], const int reviews_count)
+            void predictEmptyReviews (const uint8_t reviews [][NUMBER_MOVIES], uint8_t user_reviews [NUMBER_MOVIES], int reviews_count)
             //predict the empty reviews using the cartesian distance method
             {
+                if (reviews == nullptr || user_reviews == nullptr)
+                    return;
                 if (reviews_count > MAX_REVIEWS)
-                    exit(1);
+                    reviews_count = MAX_REVIEWS;
 
                 double distance = 0;
                 double distance_min = 0; //minimum distance calculated
@@ -66,18 +68,17 @@ namespace edu {
                 std::cout << std::endl;
 
                 //replace values of user_reviews with predictions
-                std::cout << "Predicted review (inside predicted function) is: ";
+                std::cout << "Predicted review is: ";
                 for (int i = 0; i < NUMBER_MOVIES; i++)
                 {
                     if (user_reviews[i] == 0) //only process zero value reviews
                     {
-                        user_reviews[i] = uint8_t (std::ceil(nearest_reviews[i]));
+                        user_reviews[i] = uint8_t (std::round(nearest_reviews[i]));
                     }
                     std::cout << unsigned(user_reviews[i]) << " ";
                 }
                 std::cout << std::endl << std::endl << "////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////" << std::endl;
             }
-
         }
     }
 }
